@@ -20,7 +20,11 @@
 #define MAX31856_CR0_REG           0x00
 #define MAX31856_CR0_AUTOCONVERT   0x80
 #define MAX31856_CR0_1SHOT         0x40
+#define MAX31856_CR0_OCFAULT1      0x20
+#define MAX31856_CR0_OCFAULT0      0x10
 #define MAX31856_CR0_CJ            0x08
+#define MAX31856_CR0_FAULT         0x04
+#define MAX31856_CR0_FAULTCLR      0x02
 
 #define MAX31856_CR1_REG           0x01
 #define MAX31856_MASK_REG          0x02
@@ -82,6 +86,9 @@ class Adafruit_MAX31856 {
 
   float readCJTemperature(void);
   float readThermocoupleTemperature(void);
+
+  void setTempFaultThreshholds(float flow, float fhigh);
+  void setColdJunctionFaultThreshholds(int8_t low, int8_t high);
 
  private:
   int8_t _sclk, _miso, _mosi, _cs;

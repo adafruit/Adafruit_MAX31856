@@ -59,6 +59,7 @@ boolean Adafruit_MAX31856::begin(void) {
   // assert on any fault
   writeRegister8(MAX31856_MASK_REG, 0x0);
   
+  writeRegister8(MAX31856_CR0_REG, MAX31856_CR0_OCFAULT0);
   setThermocoupleType(MAX31856_TCTYPE_K);
 
   return true;
@@ -81,6 +82,27 @@ max31856_thermocoupletype_t Adafruit_MAX31856::getThermocoupleType(void) {
 
 uint8_t Adafruit_MAX31856::readFault(void) {
   return readRegister8(MAX31856_SR_REG);
+}
+
+void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low, int8_t high) {
+  writeRegister8(MAX31856_CJLF_REG, low);
+  writeRegister8(MAX31856_CJHF_REG, high);
+}
+
+void Adafruit_MAX31856::setTempFaultThreshholds(float flow, float fhigh) {
+  int16_t low, high;
+
+  flow *= 16;
+  low = flow;
+
+  fhigh *= 16;
+  high = flow;
+
+  writeRegister8(MAX31856_LTHFTH_REG, high >> 8);
+  writeRegister8(MAX31856_LTHFTL_REG, high);
+
+  writeRegister8(MAX31856_LTLFTH_REG, low >> 8);
+  writeRegister8(MAX31856_LTLFTL_REG, low);
 }
 
 void Adafruit_MAX31856::oneShotTemperature(void) {
