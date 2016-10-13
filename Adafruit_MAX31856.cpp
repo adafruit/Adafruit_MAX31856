@@ -96,7 +96,7 @@ void Adafruit_MAX31856::setTempFaultThreshholds(float flow, float fhigh) {
   low = flow;
 
   fhigh *= 16;
-  high = flow;
+  high = fhigh;
 
   writeRegister8(MAX31856_LTHFTH_REG, high >> 8);
   writeRegister8(MAX31856_LTHFTL_REG, high);
