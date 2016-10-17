@@ -134,8 +134,7 @@ float Adafruit_MAX31856::readThermocoupleTemperature(void) {
 
   int32_t temp24 = readRegister24(MAX31856_LTCBH_REG);
   if (temp24 & 0x800000) {
-    temp24 &= ~0x800000; // remove that bit
-    temp24 *= -1;        // set sign
+    temp24 |= 0xFF000000;  // fix sign
   }
 
   temp24 >>= 5;  // bottom 5 bits are unused
