@@ -2,8 +2,8 @@
   This is a library for the Adafruit Thermocouple Sensor w/MAX31856
 
   Designed specifically to work with the Adafruit Thermocouple Sensor
-  ----> https://www.adafruit.com/products/xxxx
-
+  ----> https://www.adafruit.com/product/3263
+  
   These sensors use SPI to communicate, 4 pins are required to  
   interface
   Adafruit invests time and resources providing this open source code, 
@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <SPI.h>
 
-static SPISettings max31856_spisettings = SPISettings(500000, MSBFIRST, SPI_MODE0);
+static SPISettings max31856_spisettings = SPISettings(500000, MSBFIRST, SPI_MODE1);
 
 
 // Software (bitbang) SPI
