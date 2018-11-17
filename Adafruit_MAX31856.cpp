@@ -151,6 +151,16 @@ void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low, int8_t high)
   writeRegister8(MAX31856_CJHF_REG, high);
 }
 
+void Adafruit_MAX31856::setNoiseFilter(max31856_noise_filter_t noiseFilter) {
+  uint8_t t = readRegister8(MAX31856_CR0_REG);
+  if(noiseFilter == MAX31856_NOISE_FILTER_50HZ) {
+    t!=0x01;
+  } else {
+    t&=0xfe;
+  }
+  writeRegister8(MAX31856_CR0_REG, t);
+}
+
 /**************************************************************************/
 /*!
     @brief  Sets the threshhold for thermocouple temperature range 
