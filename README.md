@@ -1,4 +1,4 @@
-This is the Adafruit MAX31856 Arduino Library 
+# Adafruit MAX31856 Arduino Library  [![Build Status](https://travis-ci.org/adafruit/Adafruit_MAX31856.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit_MAX31856)
 
 Tested and works great with the Adafruit Thermocouple Breakout w/MAX31856
     
