@@ -1,18 +1,36 @@
-/*************************************************** 
-  This is a library for the Adafruit Thermocouple Sensor w/MAX31856
-
-  Designed specifically to work with the Adafruit Thermocouple Sensor
-  ----> https://www.adafruit.com/product/3263
-  
-  These sensors use SPI to communicate, 4 pins are required to  
-  interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
-  BSD license, all text above must be included in any redistribution
- ****************************************************/
+/*!
+ * @file Adafruit_MAX31856.cpp
+ *
+ * @mainpage Adafruit MAX31856 thermocouple reader
+ *
+ * @section intro_sec Introduction
+ *
+ * This is the documentation for Adafruit's MAX31856 driver for the
+ * Arduino platform.  It is designed specifically to work with the
+ * Adafruit MAX31856 breakout: https://www.adafruit.com/products/3263
+ *
+ * These sensors use SPI to communicate, 4 pins are required to  
+ *  interface with the breakout.
+ *
+ * Adafruit invests time and resources providing this open source code,
+ * please support Adafruit and open-source hardware by purchasing
+ * products from Adafruit!
+ *
+ * @section dependencies Dependencies
+ *
+ * This library depends on <a href="https://github.com/adafruit/Adafruit_Sensor">
+ * Adafruit_Sensor</a> being present on your system. Please make sure you have
+ * installed the latest version before using this library.
+ *
+ * @section author Author
+ *
+ * Written by ladyada for Adafruit Industries.
+ *
+ * @section license License
+ *
+ * BSD license, all text here must be included in any redistribution.
+ *
+ */
 
 #include "Adafruit_MAX31856.h"
 #ifdef __AVR
@@ -27,7 +45,15 @@
 static SPISettings max31856_spisettings = SPISettings(500000, MSBFIRST, SPI_MODE1);
 
 
-// Software (bitbang) SPI
+/**************************************************************************/
+/*!
+    @brief  Instantiate MAX31856 object and use software SPI pins
+    @param  spi_cs Bitbang SPI Chip Select
+    @param  spi_mosi Bitbang SPI MOSI
+    @param  spi_miso Bitbang SPI MISO
+    @param  spi_clk Bitbang SPI Clock
+*/
+/**************************************************************************/
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk) {
   _sclk = spi_clk;
   _cs = spi_cs;
@@ -36,12 +62,23 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
 
 }
 
-// Hardware SPI init
+/**************************************************************************/
+/*!
+    @brief  Instantiate MAX31856 object and use hardware SPI
+    @param  spi_cs Any pin for SPI Chip Select
+*/
+/**************************************************************************/
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
   _cs = spi_cs;
   _sclk = _miso = _mosi = -1;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Initialize MAX31856 attach/set pins or SPI device, default to K thermocouple
+    @returns Always returns true at this time (no known way of detecting chip ID)
+*/
+/**************************************************************************/
 boolean Adafruit_MAX31856::begin(void) {
   pinMode(_cs, OUTPUT);
   digitalWrite(_cs, HIGH);
@@ -65,7 +102,12 @@ boolean Adafruit_MAX31856::begin(void) {
   return true;
 }
 
-
+/**************************************************************************/
+/*!
+    @brief  Set which kind of Thermocouple (K, J, T, etc) to detect & decode
+    @param type The enumeration type of the thermocouple
+*/
+/**************************************************************************/
 void Adafruit_MAX31856::setThermocoupleType(max31856_thermocoupletype_t type) {
   uint8_t t = readRegister8(MAX31856_CR1_REG);
   t &= 0xF0; // mask off bottom 4 bits
@@ -73,6 +115,12 @@ void Adafruit_MAX31856::setThermocoupleType(max31856_thermocoupletype_t type) {
   writeRegister8(MAX31856_CR1_REG, t);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Get which kind of Thermocouple (K, J, T, etc) we are using
+    @returns The enumeration type of the thermocouple
+*/
+/**************************************************************************/
 max31856_thermocoupletype_t Adafruit_MAX31856::getThermocoupleType(void) {
   uint8_t t = readRegister8(MAX31856_CR1_REG);
   t &= 0x0F;
@@ -80,15 +128,37 @@ max31856_thermocoupletype_t Adafruit_MAX31856::getThermocoupleType(void) {
   return (max31856_thermocoupletype_t)(t);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Read the fault register (8 bits)
+    @returns 8 bits of fault register data
+*/
+/**************************************************************************/
 uint8_t Adafruit_MAX31856::readFault(void) {
   return readRegister8(MAX31856_SR_REG);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Sets the threshhold for internal chip temperature range 
+    for fault detection. NOT the thermocouple temperature range!
+    @param  low Low (min) temperature, signed 8 bit so -128 to 127 degrees C
+    @param  high High (max) temperature, signed 8 bit so -128 to 127 degrees C
+*/
+/**************************************************************************/
 void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low, int8_t high) {
   writeRegister8(MAX31856_CJLF_REG, low);
   writeRegister8(MAX31856_CJHF_REG, high);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Sets the threshhold for thermocouple temperature range 
+    for fault detection. NOT the internal chip temperature range!
+    @param  flow Low (min) temperature, floating point
+    @param  fhigh High (max) temperature, floating point
+*/
+/**************************************************************************/
 void Adafruit_MAX31856::setTempFaultThreshholds(float flow, float fhigh) {
   int16_t low, high;
 
@@ -105,8 +175,13 @@ void Adafruit_MAX31856::setTempFaultThreshholds(float flow, float fhigh) {
   writeRegister8(MAX31856_LTLFTL_REG, low);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Begin a one-shot (read temperature only upon request) measurement.
+    Value must be read later, not returned here!
+*/
+/**************************************************************************/
 void Adafruit_MAX31856::oneShotTemperature(void) {
-
   writeRegister8(MAX31856_CJTO_REG, 0x0);
 
   uint8_t t = readRegister8(MAX31856_CR0_REG);
@@ -119,6 +194,12 @@ void Adafruit_MAX31856::oneShotTemperature(void) {
   delay(250); // MEME FIX autocalculate based on oversampling
 }
 
+/**************************************************************************/
+/*!
+    @brief  Start a one-shot measurement and return internal chip temperature
+    @returns Floating point temperature of chip in Celsius
+*/
+/**************************************************************************/
 float Adafruit_MAX31856::readCJTemperature(void) {
   oneShotTemperature();
 
@@ -129,6 +210,12 @@ float Adafruit_MAX31856::readCJTemperature(void) {
   return tempfloat;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Start a one-shot measurement and return thermocouple tip temperature
+    @returns Floating point temperature at end of thermocouple in Celsius
+*/
+/**************************************************************************/
 float Adafruit_MAX31856::readThermocoupleTemperature(void) {
   oneShotTemperature();
 
