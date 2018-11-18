@@ -1,20 +1,20 @@
 #include <Adafruit_MAX31856.h>
 
 // Use software SPI: CS, DI, DO, CLK
-Adafruit_MAX31856 max = Adafruit_MAX31856(10, 11, 12, 13);
+Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(10, 11, 12, 13);
 // use hardware SPI, just pass in the CS pin
-//Adafruit_MAX31856 max = Adafruit_MAX31856(10);
+//Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(10);
 
 void setup() {
   Serial.begin(115200);
   Serial.println("MAX31856 thermocouple test");
 
-  max.begin();
+  maxthermo.begin();
 
-  max.setThermocoupleType(MAX31856_TCTYPE_K);
+  maxthermo.setThermocoupleType(MAX31856_TCTYPE_K);
 
   Serial.print("Thermocouple type: ");
-  switch ( max.getThermocoupleType() ) {
+  switch (maxthermo.getThermocoupleType() ) {
     case MAX31856_TCTYPE_B: Serial.println("B Type"); break;
     case MAX31856_TCTYPE_E: Serial.println("E Type"); break;
     case MAX31856_TCTYPE_J: Serial.println("J Type"); break;
@@ -32,11 +32,13 @@ void setup() {
 }
 
 void loop() {
-  Serial.print("Cold Junction Temp: "); Serial.println(max.readCJTemperature());
+  Serial.print("Cold Junction Temp: "); 
+  Serial.println(maxthermo.readCJTemperature());
 
-  Serial.print("Thermocouple Temp: "); Serial.println(max.readThermocoupleTemperature());
+  Serial.print("Thermocouple Temp: "); 
+  Serial.println(maxthermo.readThermocoupleTemperature());
   // Check and print any faults
-  uint8_t fault = max.readFault();
+  uint8_t fault = maxthermo.readFault();
   if (fault) {
     if (fault & MAX31856_FAULT_CJRANGE) Serial.println("Cold Junction Range Fault");
     if (fault & MAX31856_FAULT_TCRANGE) Serial.println("Thermocouple Range Fault");
