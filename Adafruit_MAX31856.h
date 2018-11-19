@@ -100,10 +100,11 @@ class Adafruit_MAX31856 {
   max31856_thermocoupletype_t getThermocoupleType(void);
 
   uint8_t readFault(void);
-  void oneShotTemperature(void);
+  bool oneShotTemperature(bool waitUntilDone=true);
 
-  float readCJTemperature(void);
-  float readThermocoupleTemperature(void);
+  bool isConversionDone(void);
+  float readCJTemperature(bool performOneShot=true);
+  float readThermocoupleTemperature(bool performOneShot=true);
 
   void setTempFaultThreshholds(float flow, float fhigh);
   void setColdJunctionFaultThreshholds(int8_t low, int8_t high);

@@ -196,9 +196,23 @@ void Adafruit_MAX31856::setTempFaultThreshholds(float flow, float fhigh) {
 /*!
     @brief  Begin a one-shot (read temperature only upon request) measurement.
     Value must be read later, not returned here!
+
+    @param waitUntilDone Indicates if it should wait for the conversion to finish,
+    or return immediately. Defaults to true for compatibility.
+
+    @returns True if a conversion was successfully performed, or False if it 
+    timed out when called with waitUntilDone=true.
+    Also false with waitUntilDone=false;
+
+    If you're calling readCJTemperature(true) or readThermocoupleTemperature(true),
+    DO NOT call this function! 
+
+    If you're calling readCJTemperature(false) or readThermocoupleTemperature(false),
+    call this function with waitUntilDone=false, and either wait about 250ms, 
+    or poll isConversionDone() until it returns true.
 */
 /**************************************************************************/
-void Adafruit_MAX31856::oneShotTemperature(void) {
+bool Adafruit_MAX31856::oneShotTemperature(bool waitUntilDone) {
   writeRegister8(MAX31856_CJTO_REG, 0x0);
 
   uint8_t t = readRegister8(MAX31856_CR0_REG);
@@ -207,18 +221,39 @@ void Adafruit_MAX31856::oneShotTemperature(void) {
   t |= MAX31856_CR0_1SHOT;
 
   writeRegister8(MAX31856_CR0_REG, t);
+  if(waitUntilDone) {
+    uint32_t timeoutMillis=millis();
+    while(!isConversionDone()) { //poll the register
+     if(millis()-timeoutMillis<250)
+        return false; //on timeout we return false
+     delay(10); // this 10 was arbitrary
+    }
+    return true; //success
+  }
+  return false; //always false whem waitUntilDone=false
+}
 
-  delay(250); // MEME FIX autocalculate based on oversampling
+/**************************************************************************/
+/*! @brief Polls the MAX31856 to see if the conversion finalized
+    @returns true if finalized, false if the conversion is still in progress
+*/
+bool Adafruit_MAX31856::isConversionDone(void){
+  return !(readRegister8(MAX31856_CR0_REG) & MAX31856_CR0_1SHOT);
 }
 
 /**************************************************************************/
 /*!
     @brief  Start a one-shot measurement and return internal chip temperature
     @returns Floating point temperature of chip in Celsius
+    @param performOneShot Indicates if it should only read the register (false)
+    or if it should start a conversion and wait for it to finish (true). Defaults
+    to true for backwards compatibility
 */
 /**************************************************************************/
-float Adafruit_MAX31856::readCJTemperature(void) {
-  oneShotTemperature();
+float Adafruit_MAX31856::readCJTemperature(bool performOneShot) {
+  if(performOneShot){
+    oneShotTemperature(true);
+  }
 
   int16_t temp16 = readRegister16(MAX31856_CJTH_REG);
   float tempfloat = temp16;
@@ -231,10 +266,15 @@ float Adafruit_MAX31856::readCJTemperature(void) {
 /*!
     @brief  Start a one-shot measurement and return thermocouple tip temperature
     @returns Floating point temperature at end of thermocouple in Celsius
+    @param performOneShot Indicates if it should only read the register (false)
+    or if it should start a conversion and wait for it to finish (true). Defaults
+    to true for backwards compatibility
 */
 /**************************************************************************/
-float Adafruit_MAX31856::readThermocoupleTemperature(void) {
-  oneShotTemperature();
+float Adafruit_MAX31856::readThermocoupleTemperature(bool performOneShot) {
+  if(performOneShot){
+    oneShotTemperature(true);
+  }
 
   int32_t temp24 = readRegister24(MAX31856_LTCBH_REG);
   if (temp24 & 0x800000) {
