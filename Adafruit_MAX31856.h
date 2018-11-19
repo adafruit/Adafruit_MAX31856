@@ -55,6 +55,7 @@
 #define MAX31856_FAULT_OVUV        0x02    ///< Fault status Overvoltage or Undervoltage Input Fault flag
 #define MAX31856_FAULT_OPEN        0x01    ///< Fault status Thermocouple Open-Circuit Fault flag
 
+/** Noise filtering options enum. Use with setNoiseFilter() */
 typedef enum {
 MAX31856_NOISE_FILTER_50HZ,
 MAX31856_NOISE_FILTER_60HZ
