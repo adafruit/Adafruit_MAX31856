@@ -107,6 +107,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ab9425c9c1dc7ec3999565e4bb57cac91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#ab9425c9c1dc7ec3999565e4bb57cac91">setColdJunctionFaultThreshholds</a> (int8_t low, int8_t high)</td></tr>
 <tr class="memdesc:ab9425c9c1dc7ec3999565e4bb57cac91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the threshhold for internal chip temperature range for fault detection. NOT the thermocouple temperature range!  <a href="#ab9425c9c1dc7ec3999565e4bb57cac91">More...</a><br /></td></tr>
 <tr class="separator:ab9425c9c1dc7ec3999565e4bb57cac91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaaae5917363ba66de2cd4691b7a7f90b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#aaaae5917363ba66de2cd4691b7a7f90b">setNoiseFilter</a> (<a class="el" href="_adafruit___m_a_x31856_8h.html#a3e6fad05eb9503dfdd44d2dfc5a73833">max31856_noise_filter_t</a> noiseFilter)</td></tr>
+<tr class="memdesc:aaaae5917363ba66de2cd4691b7a7f90b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the mains noise filter. Can be set to 50 or 60hz. Defaults to 60hz. You need to call this if you live in a 50hz country.  <a href="#aaaae5917363ba66de2cd4691b7a7f90b">More...</a><br /></td></tr>
+<tr class="separator:aaaae5917363ba66de2cd4691b7a7f90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that stores state and functions for interacting with MAX31856. </p>
@@ -388,6 +391,32 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   <table class="params">
     <tr><td class="paramname">low</td><td>Low (min) temperature, signed 8 bit so -128 to 127 degrees C </td></tr>
     <tr><td class="paramname">high</td><td>High (max) temperature, signed 8 bit so -128 to 127 degrees C </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaaae5917363ba66de2cd4691b7a7f90b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaaae5917363ba66de2cd4691b7a7f90b">&#9670;&nbsp;</a></span>setNoiseFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Adafruit_MAX31856::setNoiseFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_adafruit___m_a_x31856_8h.html#a3e6fad05eb9503dfdd44d2dfc5a73833">max31856_noise_filter_t</a>&#160;</td>
+          <td class="paramname"><em>noiseFilter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the mains noise filter. Can be set to 50 or 60hz. Defaults to 60hz. You need to call this if you live in a 50hz country. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noiseFilter</td><td>One of MAX31856_NOISE_FILTER_50HZ or MAX31856_NOISE_FILTER_60HZ </td></tr>
   </table>
   </dd>
 </dl>

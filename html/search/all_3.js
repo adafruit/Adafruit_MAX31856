@@ -30,6 +30,7 @@ var searchData=
   ['max31856_5fltlfth_5freg',['MAX31856_LTLFTH_REG',['../_adafruit___m_a_x31856_8h.html#a7e56c4f70680b266cbbbc3b5d0c7cecd',1,'Adafruit_MAX31856.h']]],
   ['max31856_5fltlftl_5freg',['MAX31856_LTLFTL_REG',['../_adafruit___m_a_x31856_8h.html#a27be446d84ad9087a86da1e7a6a84449',1,'Adafruit_MAX31856.h']]],
   ['max31856_5fmask_5freg',['MAX31856_MASK_REG',['../_adafruit___m_a_x31856_8h.html#a2063e65c82e21287dbfb2a46593de14f',1,'Adafruit_MAX31856.h']]],
+  ['max31856_5fnoise_5ffilter_5ft',['max31856_noise_filter_t',['../_adafruit___m_a_x31856_8h.html#a3e6fad05eb9503dfdd44d2dfc5a73833',1,'Adafruit_MAX31856.h']]],
   ['max31856_5fsr_5freg',['MAX31856_SR_REG',['../_adafruit___m_a_x31856_8h.html#a48aa570052978f75e56080151e2896ec',1,'Adafruit_MAX31856.h']]],
   ['max31856_5fthermocoupletype_5ft',['max31856_thermocoupletype_t',['../_adafruit___m_a_x31856_8h.html#a654dfce7234d63cb50bbd610726f7aee',1,'Adafruit_MAX31856.h']]]
 ];
