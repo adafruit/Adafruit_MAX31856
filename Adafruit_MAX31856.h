@@ -55,6 +55,12 @@
 #define MAX31856_FAULT_OVUV        0x02    ///< Fault status Overvoltage or Undervoltage Input Fault flag
 #define MAX31856_FAULT_OPEN        0x01    ///< Fault status Thermocouple Open-Circuit Fault flag
 
+/** Noise filtering options enum. Use with setNoiseFilter() */
+typedef enum {
+MAX31856_NOISE_FILTER_50HZ,
+MAX31856_NOISE_FILTER_60HZ
+} max31856_noise_filter_t;
+
 /** Multiple types of thermocouples supported */
 typedef enum
 {
@@ -69,6 +75,7 @@ typedef enum
   MAX31856_VMODE_G8  = 0b1000,
   MAX31856_VMODE_G32 = 0b1100,
 } max31856_thermocoupletype_t;
+
 
 #if (ARDUINO >= 100)
  #include "Arduino.h"
@@ -100,6 +107,7 @@ class Adafruit_MAX31856 {
 
   void setTempFaultThreshholds(float flow, float fhigh);
   void setColdJunctionFaultThreshholds(int8_t low, int8_t high);
+  void setNoiseFilter(max31856_noise_filter_t noiseFilter);
 
  private:
   int8_t _sclk, _miso, _mosi, _cs;
