@@ -151,6 +151,13 @@ void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low, int8_t high)
   writeRegister8(MAX31856_CJHF_REG, high);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Sets the mains noise filter. Can be set to 50 or 60hz. 
+    Defaults to 60hz. You need to call this if you live in a 50hz country.
+    @param  noiseFilter One of MAX31856_NOISE_FILTER_50HZ or MAX31856_NOISE_FILTER_60HZ
+*/
+/**************************************************************************/
 void Adafruit_MAX31856::setNoiseFilter(max31856_noise_filter_t noiseFilter) {
   uint8_t t = readRegister8(MAX31856_CR0_REG);
   if(noiseFilter == MAX31856_NOISE_FILTER_50HZ) {
