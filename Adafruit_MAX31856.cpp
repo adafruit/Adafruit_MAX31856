@@ -60,6 +60,8 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
   _miso = spi_miso;
   _mosi = spi_mosi;
 
+  _lastTemperatureRead = -10000.0;
+  _lastTemperatureStartReadingTime = 0L;
 }
 
 /**************************************************************************/
@@ -71,6 +73,9 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
   _cs = spi_cs;
   _sclk = _miso = _mosi = -1;
+
+  _lastTemperatureRead = -10000.0;
+  _lastTemperatureStartReadingTime = 0L;
 }
 
 /**************************************************************************/
@@ -98,6 +103,8 @@ boolean Adafruit_MAX31856::begin(void) {
   
   writeRegister8(MAX31856_CR0_REG, MAX31856_CR0_OCFAULT0);
   setThermocoupleType(MAX31856_TCTYPE_K);
+
+  readThermocoupleTemperatureNonBlockingStart();
 
   return true;
 }
@@ -207,8 +214,6 @@ void Adafruit_MAX31856::oneShotTemperature(void) {
   t |= MAX31856_CR0_1SHOT;
 
   writeRegister8(MAX31856_CR0_REG, t);
-
-  delay(250); // MEME FIX autocalculate based on oversampling
 }
 
 /**************************************************************************/
@@ -236,6 +241,8 @@ float Adafruit_MAX31856::readCJTemperature(void) {
 float Adafruit_MAX31856::readThermocoupleTemperature(void) {
   oneShotTemperature();
 
+  delay(250); // MEME FIX autocalculate based on oversampling
+
   int32_t temp24 = readRegister24(MAX31856_LTCBH_REG);
   if (temp24 & 0x800000) {
     temp24 |= 0xFF000000;  // fix sign
@@ -247,6 +254,63 @@ float Adafruit_MAX31856::readThermocoupleTemperature(void) {
   tempfloat *= 0.0078125;
 
   return tempfloat;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start a one-shot measurement. If called again too soon, does nothing.
+*/
+/**************************************************************************/
+void Adafruit_MAX31856::readThermocoupleTemperatureNonBlockingStart(void) {
+  if (millis() - _lastTemperatureStartReadingTime <= 200) {
+  	return;
+  }
+
+  oneShotTemperature();
+
+  _lastTemperatureStartReadingTime = millis();
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start a one-shot measurement and return thermocouple tip temperature
+    		without blocking the execution. If it cannot read at the moment of
+    		the invocation, returns the last read temperature.
+    @returns Floating point temperature at end of thermocouple in Celsius or
+             the last read temperature if called too soon.
+*/
+/**************************************************************************/
+float Adafruit_MAX31856::readThermocoupleTemperatureNonBlockingFinish(void) {
+  if (millis() - _lastTemperatureStartReadingTime <= 200) {
+  	return _lastTemperatureRead;
+  }
+
+  int32_t temp24 = readRegister24(MAX31856_LTCBH_REG);
+  if (temp24 & 0x800000) {
+    temp24 |= 0xFF000000;  // fix sign
+  }
+
+  temp24 >>= 5;  // bottom 5 bits are unused
+
+  float tempfloat = temp24;
+  tempfloat *= 0.0078125;
+
+  _lastTemperatureRead = tempfloat;
+
+  return tempfloat;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Uses last read value and starts a new measurement.
+    @returns The last read temperature.
+*/
+/**************************************************************************/
+float Adafruit_MAX31856::readLastThermocoupleTemperatureNonBlocking(void) {
+  float tempfloat = readThermocoupleTemperatureNonBlockingFinish();
+  readThermocoupleTemperatureNonBlockingStart();
+
+  return tempfloat;  
 }
 
 /**********************************************/

@@ -105,12 +105,19 @@ class Adafruit_MAX31856 {
   float readCJTemperature(void);
   float readThermocoupleTemperature(void);
 
+  void readThermocoupleTemperatureNonBlockingStart(void);
+  float readThermocoupleTemperatureNonBlockingFinish(void);
+  float readLastThermocoupleTemperatureNonBlocking(void);
+
   void setTempFaultThreshholds(float flow, float fhigh);
   void setColdJunctionFaultThreshholds(int8_t low, int8_t high);
   void setNoiseFilter(max31856_noise_filter_t noiseFilter);
 
  private:
   int8_t _sclk, _miso, _mosi, _cs;
+
+  unsigned long _lastTemperatureStartReadingTime;
+  float _lastTemperatureRead;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
