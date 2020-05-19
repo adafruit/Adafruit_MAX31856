@@ -5,7 +5,7 @@
  * Arduino platform.  It is designed specifically to work with the
  * Adafruit MAX31856 breakout: https://www.adafruit.com/products/3263
  *
- * These sensors use SPI to communicate, 4 pins are required to  
+ * These sensors use SPI to communicate, 4 pins are required to
  *  interface with the breakout.
  *
  * Adafruit invests time and resources providing this open source code,
@@ -38,10 +38,10 @@
 #define MAX31856_LTHFTL_REG        0x06    ///< Linearized Temperature High Fault Threshold Register, LSB
 #define MAX31856_LTLFTH_REG        0x07    ///< Linearized Temperature Low Fault Threshold Register, MSB
 #define MAX31856_LTLFTL_REG        0x08    ///< Linearized Temperature Low Fault Threshold Register, LSB
-#define MAX31856_CJTO_REG          0x09    ///< Cold-Junction Temperature Offset Register 
+#define MAX31856_CJTO_REG          0x09    ///< Cold-Junction Temperature Offset Register
 #define MAX31856_CJTH_REG          0x0A    ///< Cold-Junction Temperature Register, MSB
 #define MAX31856_CJTL_REG          0x0B    ///< Cold-Junction Temperature Register, LSB
-#define MAX31856_LTCBH_REG         0x0C    ///< Linearized TC Temperature, Byte 2 
+#define MAX31856_LTCBH_REG         0x0C    ///< Linearized TC Temperature, Byte 2
 #define MAX31856_LTCBM_REG         0x0D    ///< Linearized TC Temperature, Byte 1
 #define MAX31856_LTCBL_REG         0x0E    ///< Linearized TC Temperature, Byte 0
 #define MAX31856_SR_REG            0x0F    ///< Fault Status Register
@@ -83,8 +83,10 @@ typedef enum
  #include "WProgram.h"
 #endif
 
+#include <Adafruit_SPIDevice.h>
+
 /**************************************************************************/
-/*! 
+/*!
     @brief  Class that stores state and functions for interacting with MAX31856
 */
 /**************************************************************************/
@@ -110,7 +112,9 @@ class Adafruit_MAX31856 {
   void setNoiseFilter(max31856_noise_filter_t noiseFilter);
 
  private:
-  int8_t _sclk, _miso, _mosi, _cs;
+  Adafruit_SPIDevice spi_dev = NULL;
+  boolean initialized;
+  //int8_t _sclk, _miso, _mosi, _cs;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
