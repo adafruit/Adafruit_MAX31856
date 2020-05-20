@@ -67,7 +67,7 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
 */
 /**************************************************************************/
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
-  spi_dev = Adafruit_SPIDevice(spi_cs, 1000000);
+  spi_dev = Adafruit_SPIDevice(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1);
 
   initialized = false;
 }
