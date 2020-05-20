@@ -42,8 +42,6 @@
 #include <stdlib.h>
 #include <SPI.h>
 
-//static SPISettings max31856_spisettings = SPISettings(500000, MSBFIRST, SPI_MODE1);
-
 
 /**************************************************************************/
 /*!
