@@ -114,7 +114,6 @@ class Adafruit_MAX31856 {
  private:
   Adafruit_SPIDevice spi_dev = NULL;
   boolean initialized;
-  //int8_t _sclk, _miso, _mosi, _cs;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
@@ -123,7 +122,6 @@ class Adafruit_MAX31856 {
   uint32_t readRegister24(uint8_t addr);
 
   void     writeRegister8(uint8_t addr, uint8_t reg);
-  uint8_t spixfer(uint8_t addr);
 };
 
 #endif

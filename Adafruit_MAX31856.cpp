@@ -58,13 +58,6 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
   spi_dev = Adafruit_SPIDevice(spi_cs, spi_clk, spi_miso, spi_mosi, 1000000);
 
   initialized = false;
-  /*
-  _sclk = spi_clk;
-  _cs = spi_cs;
-  _miso = spi_miso;
-  _mosi = spi_mosi;
-  */
-
 }
 
 /**************************************************************************/
@@ -77,10 +70,6 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
   spi_dev = Adafruit_SPIDevice(spi_cs, 1000000);
 
   initialized = false;
-  /*
-  _cs = spi_cs;
-  _sclk = _miso = _mosi = -1;
-  */
 }
 
 /**************************************************************************/
@@ -93,21 +82,6 @@ boolean Adafruit_MAX31856::begin(void) {
   initialized = spi_dev.begin();
 
   if (!initialized) return false;
-
-  /*
-  pinMode(_cs, OUTPUT);
-  digitalWrite(_cs, HIGH);
-
-  if (_sclk != -1) {
-    //define pin modes
-    pinMode(_sclk, OUTPUT);
-    pinMode(_mosi, OUTPUT);
-    pinMode(_miso, INPUT);
-  } else {
-    //start and configure hardware SPI
-    SPI.begin();
-  }
-  */
 
   // assert on any fault
   writeRegister8(MAX31856_MASK_REG, 0x0);
@@ -298,93 +272,16 @@ uint32_t Adafruit_MAX31856::readRegister24(uint8_t addr) {
   return ret;
 }
 
-
 void Adafruit_MAX31856::readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n) {
-  addr &= 0x7F; // make sure top bit is not set
+  addr &= 0x7F; // MSB=0 for read, make sure top bit is not set
 
-  spixfer(addr);
-
-  while (n--) {
-    buffer[0] = spixfer(0xFF);
-    buffer++;
-  }
-  /*
-  if (_sclk == -1)
-    SPI.beginTransaction(max31856_spisettings);
-  else
-    digitalWrite(_sclk, HIGH);
-
-  digitalWrite(_cs, LOW);
-
-  spixfer(addr);
-
-  //Serial.print("$"); Serial.print(addr, HEX); Serial.print(": ");
-  while (n--) {
-    buffer[0] = spixfer(0xFF);
-    //Serial.print(" 0x"); Serial.print(buffer[0], HEX);
-    buffer++;
-  }
-  //Serial.println();
-
-  if (_sclk == -1)
-    SPI.endTransaction();
-
-  digitalWrite(_cs, HIGH);
-  */
+  spi_dev.write_then_read(&addr, 1, buffer, n);
 }
-
 
 void Adafruit_MAX31856::writeRegister8(uint8_t addr, uint8_t data) {
-  addr |= 0x80; // make sure top bit is set
+  addr |= 0x80; // MSB=1 for write, make sure top bit is set
 
-  spixfer(addr);
-  spixfer(data);
+  uint8_t buffer[2] = {addr, data};
 
-  /*
-  if (_sclk == -1)
-    SPI.beginTransaction(max31856_spisettings);
-  else
-    digitalWrite(_sclk, HIGH);
-
-  digitalWrite(_cs, LOW);
-
-  spixfer(addr);
-  spixfer(data);
-
-  //Serial.print("$"); Serial.print(addr, HEX); Serial.print(" = 0x"); Serial.println(data, HEX);
-
-  if (_sclk == -1)
-    SPI.endTransaction();
-
-  digitalWrite(_cs, HIGH);
-  */
-}
-
-
-
-uint8_t Adafruit_MAX31856::spixfer(uint8_t x) {
-
-  //return spi_dev.transfer(x);
-
-  spi_dev.write(&x, 1);
-  spi_dev.read(&x, 1);
-  return x;
-
-  /*
-  if (_sclk == -1)
-    return SPI.transfer(x);
-
-  // software spi
-  //Serial.println("Software SPI");
-  uint8_t reply = 0;
-  for (int i=7; i>=0; i--) {
-    reply <<= 1;
-    digitalWrite(_sclk, LOW);
-    digitalWrite(_mosi, x & (1<<i));
-    digitalWrite(_sclk, HIGH);
-    if (digitalRead(_miso))
-      reply |= 1;
-  }
-  return reply;
-  */
+  spi_dev.write(buffer, 2);
 }
