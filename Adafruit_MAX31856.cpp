@@ -9,7 +9,7 @@
  * Arduino platform.  It is designed specifically to work with the
  * Adafruit MAX31856 breakout: https://www.adafruit.com/products/3263
  *
- * These sensors use SPI to communicate, 4 pins are required to  
+ * These sensors use SPI to communicate, 4 pins are required to
  *  interface with the breakout.
  *
  * Adafruit invests time and resources providing this open source code,
@@ -42,8 +42,6 @@
 #include <stdlib.h>
 #include <SPI.h>
 
-static SPISettings max31856_spisettings = SPISettings(500000, MSBFIRST, SPI_MODE1);
-
 
 /**************************************************************************/
 /*!
@@ -55,11 +53,9 @@ static SPISettings max31856_spisettings = SPISettings(500000, MSBFIRST, SPI_MODE
 */
 /**************************************************************************/
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk) {
-  _sclk = spi_clk;
-  _cs = spi_cs;
-  _miso = spi_miso;
-  _mosi = spi_mosi;
+  spi_dev = Adafruit_SPIDevice(spi_cs, spi_clk, spi_miso, spi_mosi, 1000000);
 
+  initialized = false;
 }
 
 /**************************************************************************/
@@ -69,8 +65,9 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
 */
 /**************************************************************************/
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
-  _cs = spi_cs;
-  _sclk = _miso = _mosi = -1;
+  spi_dev = Adafruit_SPIDevice(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1);
+
+  initialized = false;
 }
 
 /**************************************************************************/
@@ -80,22 +77,13 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
 */
 /**************************************************************************/
 boolean Adafruit_MAX31856::begin(void) {
-  pinMode(_cs, OUTPUT);
-  digitalWrite(_cs, HIGH);
+  initialized = spi_dev.begin();
 
-  if (_sclk != -1) {
-    //define pin modes
-    pinMode(_sclk, OUTPUT); 
-    pinMode(_mosi, OUTPUT); 
-    pinMode(_miso, INPUT);
-  } else {
-    //start and configure hardware SPI
-    SPI.begin();
-  }
+  if (!initialized) return false;
 
   // assert on any fault
   writeRegister8(MAX31856_MASK_REG, 0x0);
-  
+
   writeRegister8(MAX31856_CR0_REG, MAX31856_CR0_OCFAULT0);
   setThermocoupleType(MAX31856_TCTYPE_K);
 
@@ -140,7 +128,7 @@ uint8_t Adafruit_MAX31856::readFault(void) {
 
 /**************************************************************************/
 /*!
-    @brief  Sets the threshhold for internal chip temperature range 
+    @brief  Sets the threshhold for internal chip temperature range
     for fault detection. NOT the thermocouple temperature range!
     @param  low Low (min) temperature, signed 8 bit so -128 to 127 degrees C
     @param  high High (max) temperature, signed 8 bit so -128 to 127 degrees C
@@ -153,7 +141,7 @@ void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low, int8_t high)
 
 /**************************************************************************/
 /*!
-    @brief  Sets the mains noise filter. Can be set to 50 or 60hz. 
+    @brief  Sets the mains noise filter. Can be set to 50 or 60hz.
     Defaults to 60hz. You need to call this if you live in a 50hz country.
     @param  noiseFilter One of MAX31856_NOISE_FILTER_50HZ or MAX31856_NOISE_FILTER_60HZ
 */
@@ -170,7 +158,7 @@ void Adafruit_MAX31856::setNoiseFilter(max31856_noise_filter_t noiseFilter) {
 
 /**************************************************************************/
 /*!
-    @brief  Sets the threshhold for thermocouple temperature range 
+    @brief  Sets the threshhold for thermocouple temperature range
     for fault detection. NOT the internal chip temperature range!
     @param  flow Low (min) temperature, floating point
     @param  fhigh High (max) temperature, floating point
@@ -265,7 +253,7 @@ uint16_t Adafruit_MAX31856::readRegister16(uint8_t addr) {
   uint16_t ret = buffer[0];
   ret <<= 8;
   ret |=  buffer[1];
-  
+
   return ret;
 }
 
@@ -278,75 +266,20 @@ uint32_t Adafruit_MAX31856::readRegister24(uint8_t addr) {
   ret |=  buffer[1];
   ret <<= 8;
   ret |=  buffer[2];
-  
+
   return ret;
 }
 
-
 void Adafruit_MAX31856::readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n) {
-  addr &= 0x7F; // make sure top bit is not set
+  addr &= 0x7F; // MSB=0 for read, make sure top bit is not set
 
-  if (_sclk == -1)
-    SPI.beginTransaction(max31856_spisettings);
-  else 
-    digitalWrite(_sclk, HIGH);
-
-  digitalWrite(_cs, LOW);
-
-  spixfer(addr);
-
-  //Serial.print("$"); Serial.print(addr, HEX); Serial.print(": ");
-  while (n--) {
-    buffer[0] = spixfer(0xFF);
-    //Serial.print(" 0x"); Serial.print(buffer[0], HEX);
-    buffer++;
-  }
-  //Serial.println();
-
-  if (_sclk == -1)
-    SPI.endTransaction();
-
-  digitalWrite(_cs, HIGH);
+  spi_dev.write_then_read(&addr, 1, buffer, n);
 }
-
 
 void Adafruit_MAX31856::writeRegister8(uint8_t addr, uint8_t data) {
-  addr |= 0x80; // make sure top bit is set
+  addr |= 0x80; // MSB=1 for write, make sure top bit is set
 
-  if (_sclk == -1)
-    SPI.beginTransaction(max31856_spisettings);
-  else 
-    digitalWrite(_sclk, HIGH);
+  uint8_t buffer[2] = {addr, data};
 
-  digitalWrite(_cs, LOW);
-
-  spixfer(addr);
-  spixfer(data);
-
-  //Serial.print("$"); Serial.print(addr, HEX); Serial.print(" = 0x"); Serial.println(data, HEX);
-
-  if (_sclk == -1)
-    SPI.endTransaction();
-
-  digitalWrite(_cs, HIGH);
-}
-
-
-
-uint8_t Adafruit_MAX31856::spixfer(uint8_t x) {
-  if (_sclk == -1)
-    return SPI.transfer(x);
-
-  // software spi
-  //Serial.println("Software SPI");
-  uint8_t reply = 0;
-  for (int i=7; i>=0; i--) {
-    reply <<= 1;
-    digitalWrite(_sclk, LOW);
-    digitalWrite(_mosi, x & (1<<i));
-    digitalWrite(_sclk, HIGH);
-    if (digitalRead(_miso))
-      reply |= 1;
-  }
-  return reply;
+  spi_dev.write(buffer, 2);
 }
