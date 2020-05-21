@@ -84,10 +84,48 @@ boolean Adafruit_MAX31856::begin(void) {
   // assert on any fault
   writeRegister8(MAX31856_MASK_REG, 0x0);
 
+  // enable open circuit fault detection
   writeRegister8(MAX31856_CR0_REG, MAX31856_CR0_OCFAULT0);
+
+  // set cold junction temperature offset to zero
+  writeRegister8(MAX31856_CJTO_REG, 0x0);
+
+  // set Type K by default
   setThermocoupleType(MAX31856_TCTYPE_K);
 
+  // set One-Shot conversion mode
+  setConversionMode(MAX31856_ONESHOT);
+
   return true;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Set temperature conversion mode
+    @param mode The conversion mode
+*/
+/**************************************************************************/
+void Adafruit_MAX31856::setConversionMode(max31856_conversion_mode_t mode) {
+  conversionMode = mode;
+  uint8_t t = readRegister8(MAX31856_CR0_REG);   // get current register value
+  if (conversionMode == MAX31856_CONTINUOUS) {
+    t |= MAX31856_CR0_AUTOCONVERT;               // turn on automatic
+    t &= ~MAX31856_CR0_1SHOT;                    // turn off one-shot
+  } else {
+    t &= ~MAX31856_CR0_AUTOCONVERT;              // turn off automatic
+    t |= MAX31856_CR0_1SHOT;                     // turn on one-shot
+  }
+  writeRegister8(MAX31856_CR0_REG, t);           // write value back to register
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get temperature conversion mode
+    @returns The conversion mode
+*/
+/**************************************************************************/
+max31856_conversion_mode_t Adafruit_MAX31856::getConversionMode(void) {
+  return conversionMode;
 }
 
 /**************************************************************************/
@@ -186,55 +224,68 @@ void Adafruit_MAX31856::setTempFaultThreshholds(float flow, float fhigh) {
     Value must be read later, not returned here!
 */
 /**************************************************************************/
-void Adafruit_MAX31856::oneShotTemperature(void) {
-  writeRegister8(MAX31856_CJTO_REG, 0x0);
+void Adafruit_MAX31856::triggerOneShot(void) {
 
-  uint8_t t = readRegister8(MAX31856_CR0_REG);
+  if (conversionMode == MAX31856_CONTINUOUS) return;
 
-  t &= ~MAX31856_CR0_AUTOCONVERT; // turn off autoconvert!
-  t |= MAX31856_CR0_1SHOT;
-
-  writeRegister8(MAX31856_CR0_REG, t);
-
-  delay(250); // MEME FIX autocalculate based on oversampling
+  uint8_t t = readRegister8(MAX31856_CR0_REG); // get current register value
+  t &= ~MAX31856_CR0_AUTOCONVERT;              // turn off autoconvert
+  t |= MAX31856_CR0_1SHOT;                     // turn on one-shot
+  writeRegister8(MAX31856_CR0_REG, t);         // write value back to register
+                                               // conversion starts when CS goes high
 }
 
 /**************************************************************************/
 /*!
-    @brief  Start a one-shot measurement and return internal chip temperature
-    @returns Floating point temperature of chip in Celsius
+    @brief  Return status of temperature conversion.
+    @returns true if conversion complete, otherwise false
+*/
+/**************************************************************************/
+bool Adafruit_MAX31856::conversionComplete(void) {
+
+  if (conversionMode == MAX31856_CONTINUOUS) return true;
+  return !(readRegister8(MAX31856_CR0_REG) & MAX31856_CR0_1SHOT);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Return cold-junction (internal chip) temperature
+    @returns Floating point temperature in Celsius
 */
 /**************************************************************************/
 float Adafruit_MAX31856::readCJTemperature(void) {
-  oneShotTemperature();
 
-  int16_t temp16 = readRegister16(MAX31856_CJTH_REG);
-  float tempfloat = temp16;
-  tempfloat /= 256.0;
-
-  return tempfloat;
+  return readRegister16(MAX31856_CJTH_REG) / 256.0;
 }
 
 /**************************************************************************/
 /*!
-    @brief  Start a one-shot measurement and return thermocouple tip temperature
-    @returns Floating point temperature at end of thermocouple in Celsius
+    @brief  Return hot-junction (thermocouple) temperature
+    @returns Floating point temperature in Celsius
 */
 /**************************************************************************/
 float Adafruit_MAX31856::readThermocoupleTemperature(void) {
-  oneShotTemperature();
 
+  // for one-shot, make it happen
+  if (conversionMode == MAX31856_ONESHOT) {
+    triggerOneShot();
+    uint32_t start = millis();
+    while (!conversionComplete()) {
+      if (millis() - start > 250) return NAN;
+      delay(10);
+    }
+  }
+
+  // read the thermocouple temperature registers (3 bytes)
   int32_t temp24 = readRegister24(MAX31856_LTCBH_REG);
+  // and compute temperature
   if (temp24 & 0x800000) {
     temp24 |= 0xFF000000;  // fix sign
   }
 
   temp24 >>= 5;  // bottom 5 bits are unused
 
-  float tempfloat = temp24;
-  tempfloat *= 0.0078125;
-
-  return tempfloat;
+  return temp24 * 0.0078125;
 }
 
 /**********************************************/
