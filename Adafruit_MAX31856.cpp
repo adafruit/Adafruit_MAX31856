@@ -18,9 +18,10 @@
  *
  * @section dependencies Dependencies
  *
- * This library depends on <a href="https://github.com/adafruit/Adafruit_Sensor">
- * Adafruit_Sensor</a> being present on your system. Please make sure you have
- * installed the latest version before using this library.
+ * This library depends on <a
+ * href="https://github.com/adafruit/Adafruit_Sensor"> Adafruit_Sensor</a> being
+ * present on your system. Please make sure you have installed the latest
+ * version before using this library.
  *
  * @section author Author
  *
@@ -34,14 +35,13 @@
 
 #include "Adafruit_MAX31856.h"
 #ifdef __AVR
-  #include <avr/pgmspace.h>
+#include <avr/pgmspace.h>
 #elif defined(ESP8266)
-  #include <pgmspace.h>
+#include <pgmspace.h>
 #endif
 
-#include <stdlib.h>
 #include <SPI.h>
-
+#include <stdlib.h>
 
 /**************************************************************************/
 /*!
@@ -52,7 +52,8 @@
     @param  spi_clk Bitbang SPI Clock
 */
 /**************************************************************************/
-Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk) {
+Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi,
+                                     int8_t spi_miso, int8_t spi_clk) {
   spi_dev = Adafruit_SPIDevice(spi_cs, spi_clk, spi_miso, spi_mosi, 1000000);
 
   initialized = false;
@@ -65,21 +66,25 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
 */
 /**************************************************************************/
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
-  spi_dev = Adafruit_SPIDevice(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1);
+  spi_dev =
+      Adafruit_SPIDevice(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1);
 
   initialized = false;
 }
 
 /**************************************************************************/
 /*!
-    @brief  Initialize MAX31856 attach/set pins or SPI device, default to K thermocouple
-    @returns Always returns true at this time (no known way of detecting chip ID)
+    @brief  Initialize MAX31856 attach/set pins or SPI device, default to K
+   thermocouple
+    @returns Always returns true at this time (no known way of detecting chip
+   ID)
 */
 /**************************************************************************/
 boolean Adafruit_MAX31856::begin(void) {
   initialized = spi_dev.begin();
 
-  if (!initialized) return false;
+  if (!initialized)
+    return false;
 
   // assert on any fault
   writeRegister8(MAX31856_MASK_REG, 0x0);
@@ -134,7 +139,8 @@ uint8_t Adafruit_MAX31856::readFault(void) {
     @param  high High (max) temperature, signed 8 bit so -128 to 127 degrees C
 */
 /**************************************************************************/
-void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low, int8_t high) {
+void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low,
+                                                        int8_t high) {
   writeRegister8(MAX31856_CJLF_REG, low);
   writeRegister8(MAX31856_CJHF_REG, high);
 }
@@ -143,15 +149,16 @@ void Adafruit_MAX31856::setColdJunctionFaultThreshholds(int8_t low, int8_t high)
 /*!
     @brief  Sets the mains noise filter. Can be set to 50 or 60hz.
     Defaults to 60hz. You need to call this if you live in a 50hz country.
-    @param  noiseFilter One of MAX31856_NOISE_FILTER_50HZ or MAX31856_NOISE_FILTER_60HZ
+    @param  noiseFilter One of MAX31856_NOISE_FILTER_50HZ or
+   MAX31856_NOISE_FILTER_60HZ
 */
 /**************************************************************************/
 void Adafruit_MAX31856::setNoiseFilter(max31856_noise_filter_t noiseFilter) {
   uint8_t t = readRegister8(MAX31856_CR0_REG);
-  if(noiseFilter == MAX31856_NOISE_FILTER_50HZ) {
-    t|=0x01;
+  if (noiseFilter == MAX31856_NOISE_FILTER_50HZ) {
+    t |= 0x01;
   } else {
-    t&=0xfe;
+    t &= 0xfe;
   }
   writeRegister8(MAX31856_CR0_REG, t);
 }
@@ -226,10 +233,10 @@ float Adafruit_MAX31856::readThermocoupleTemperature(void) {
 
   int32_t temp24 = readRegister24(MAX31856_LTCBH_REG);
   if (temp24 & 0x800000) {
-    temp24 |= 0xFF000000;  // fix sign
+    temp24 |= 0xFF000000; // fix sign
   }
 
-  temp24 >>= 5;  // bottom 5 bits are unused
+  temp24 >>= 5; // bottom 5 bits are unused
 
   float tempfloat = temp24;
   tempfloat *= 0.0078125;
@@ -252,7 +259,7 @@ uint16_t Adafruit_MAX31856::readRegister16(uint8_t addr) {
 
   uint16_t ret = buffer[0];
   ret <<= 8;
-  ret |=  buffer[1];
+  ret |= buffer[1];
 
   return ret;
 }
@@ -263,14 +270,15 @@ uint32_t Adafruit_MAX31856::readRegister24(uint8_t addr) {
 
   uint32_t ret = buffer[0];
   ret <<= 8;
-  ret |=  buffer[1];
+  ret |= buffer[1];
   ret <<= 8;
-  ret |=  buffer[2];
+  ret |= buffer[2];
 
   return ret;
 }
 
-void Adafruit_MAX31856::readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n) {
+void Adafruit_MAX31856::readRegisterN(uint8_t addr, uint8_t buffer[],
+                                      uint8_t n) {
   addr &= 0x7F; // MSB=0 for read, make sure top bit is not set
 
   spi_dev.write_then_read(&addr, 1, buffer, n);

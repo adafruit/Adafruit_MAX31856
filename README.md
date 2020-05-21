@@ -1,4 +1,4 @@
-# Adafruit MAX31856 Arduino Library  [![Build Status](https://travis-ci.org/adafruit/Adafruit_MAX31856.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit_MAX31856)
+# Adafruit MAX31856 Arduino Library  [![Build Status](https://github.com/adafruit/Adafruit_MAX31856/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_MAX31856/actions)
 
 Tested and works great with the Adafruit Thermocouple Breakout w/MAX31856
     
