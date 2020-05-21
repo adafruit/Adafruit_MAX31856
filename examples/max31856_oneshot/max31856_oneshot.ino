@@ -1,3 +1,6 @@
+// Basic example using one-shot measurement.
+// The call to readThermocoupleTemperature() is blocking for O(100ms)
+
 #include <Adafruit_MAX31856.h>
 
 // Use software SPI: CS, DI, DO, CLK
@@ -7,6 +10,7 @@ Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(10, 11, 12, 13);
 
 void setup() {
   Serial.begin(115200);
+  while (!Serial) delay(10);
   Serial.println("MAX31856 thermocouple test");
 
   maxthermo.begin();
@@ -28,14 +32,13 @@ void setup() {
     default: Serial.println("Unknown"); break;
   }
 
-
 }
 
 void loop() {
-  Serial.print("Cold Junction Temp: "); 
+  Serial.print("Cold Junction Temp: ");
   Serial.println(maxthermo.readCJTemperature());
 
-  Serial.print("Thermocouple Temp: "); 
+  Serial.print("Thermocouple Temp: ");
   Serial.println(maxthermo.readThermocoupleTemperature());
   // Check and print any faults
   uint8_t fault = maxthermo.readFault();

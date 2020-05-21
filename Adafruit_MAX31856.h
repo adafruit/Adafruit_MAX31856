@@ -57,8 +57,8 @@
 
 /** Noise filtering options enum. Use with setNoiseFilter() */
 typedef enum {
-MAX31856_NOISE_FILTER_50HZ,
-MAX31856_NOISE_FILTER_60HZ
+  MAX31856_NOISE_FILTER_50HZ,
+  MAX31856_NOISE_FILTER_60HZ
 } max31856_noise_filter_t;
 
 /** Multiple types of thermocouples supported */
@@ -75,6 +75,13 @@ typedef enum
   MAX31856_VMODE_G8  = 0b1000,
   MAX31856_VMODE_G32 = 0b1100,
 } max31856_thermocoupletype_t;
+
+/** Temperature conversion mode */
+typedef enum {
+  MAX31856_ONESHOT,
+  MAX31856_ONESHOT_NOWAIT,
+  MAX31856_CONTINUOUS
+} max31856_conversion_mode_t;
 
 
 #if (ARDUINO >= 100)
@@ -98,11 +105,16 @@ class Adafruit_MAX31856 {
 
   boolean begin(void);
 
+  void setConversionMode(max31856_conversion_mode_t mode);
+  max31856_conversion_mode_t getConversionMode(void);
+
   void setThermocoupleType(max31856_thermocoupletype_t type);
   max31856_thermocoupletype_t getThermocoupleType(void);
 
   uint8_t readFault(void);
-  void oneShotTemperature(void);
+
+  void triggerOneShot(void);
+  bool conversionComplete(void);
 
   float readCJTemperature(void);
   float readThermocoupleTemperature(void);
@@ -114,6 +126,8 @@ class Adafruit_MAX31856 {
  private:
   Adafruit_SPIDevice spi_dev = NULL;
   boolean initialized;
+
+  max31856_conversion_mode_t conversionMode;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
