@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Adafruit MAX31856 Library: Adafruit_MAX31856 Class Reference</title>
+<title>Adafruit MAX31856 Arduino Library: Adafruit_MAX31856 Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Adafruit MAX31856 Library
+   <div id="projectname">Adafruit MAX31856 Arduino Library
    </div>
   </td>
  </tr>
@@ -82,6 +82,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a367711ffbc2b751c07f6b640c951ce41"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a367711ffbc2b751c07f6b640c951ce41">begin</a> (void)</td></tr>
 <tr class="memdesc:a367711ffbc2b751c07f6b640c951ce41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize MAX31856 attach/set pins or SPI device, default to K thermocouple.  <a href="#a367711ffbc2b751c07f6b640c951ce41">More...</a><br /></td></tr>
 <tr class="separator:a367711ffbc2b751c07f6b640c951ce41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cec2e77e20788a1a9443e7d265fc31d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a2cec2e77e20788a1a9443e7d265fc31d">setConversionMode</a> (<a class="el" href="_adafruit___m_a_x31856_8h.html#a646d434b20d218b19ed6cde2b1235fd3">max31856_conversion_mode_t</a> mode)</td></tr>
+<tr class="memdesc:a2cec2e77e20788a1a9443e7d265fc31d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set temperature conversion mode.  <a href="#a2cec2e77e20788a1a9443e7d265fc31d">More...</a><br /></td></tr>
+<tr class="separator:a2cec2e77e20788a1a9443e7d265fc31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad11b8e75de3c014c151c1697ff880f5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_adafruit___m_a_x31856_8h.html#a646d434b20d218b19ed6cde2b1235fd3">max31856_conversion_mode_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#ad11b8e75de3c014c151c1697ff880f5d">getConversionMode</a> (void)</td></tr>
+<tr class="memdesc:ad11b8e75de3c014c151c1697ff880f5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get temperature conversion mode.  <a href="#ad11b8e75de3c014c151c1697ff880f5d">More...</a><br /></td></tr>
+<tr class="separator:ad11b8e75de3c014c151c1697ff880f5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2c14883cd857b9a328dfd7ae5c5ac1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#ad2c14883cd857b9a328dfd7ae5c5ac1b">setThermocoupleType</a> (<a class="el" href="_adafruit___m_a_x31856_8h.html#a654dfce7234d63cb50bbd610726f7aee">max31856_thermocoupletype_t</a> type)</td></tr>
 <tr class="memdesc:ad2c14883cd857b9a328dfd7ae5c5ac1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set which kind of Thermocouple (K, J, T, etc) to detect &amp; decode.  <a href="#ad2c14883cd857b9a328dfd7ae5c5ac1b">More...</a><br /></td></tr>
 <tr class="separator:ad2c14883cd857b9a328dfd7ae5c5ac1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -91,15 +97,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a238c4c7c18a082d08eb4f7412a5b1af8"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a238c4c7c18a082d08eb4f7412a5b1af8">readFault</a> (void)</td></tr>
 <tr class="memdesc:a238c4c7c18a082d08eb4f7412a5b1af8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the fault register (8 bits)  <a href="#a238c4c7c18a082d08eb4f7412a5b1af8">More...</a><br /></td></tr>
 <tr class="separator:a238c4c7c18a082d08eb4f7412a5b1af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9e225c24c6df377d5d4e8522c12fb08"><td class="memItemLeft" align="right" valign="top"><a id="ab9e225c24c6df377d5d4e8522c12fb08"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#ab9e225c24c6df377d5d4e8522c12fb08">oneShotTemperature</a> (void)</td></tr>
-<tr class="memdesc:ab9e225c24c6df377d5d4e8522c12fb08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begin a one-shot (read temperature only upon request) measurement. Value must be read later, not returned here! <br /></td></tr>
-<tr class="separator:ab9e225c24c6df377d5d4e8522c12fb08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1835dd599b0fad2d62d706dbfb6b66b7"><td class="memItemLeft" align="right" valign="top"><a id="a1835dd599b0fad2d62d706dbfb6b66b7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a1835dd599b0fad2d62d706dbfb6b66b7">triggerOneShot</a> (void)</td></tr>
+<tr class="memdesc:a1835dd599b0fad2d62d706dbfb6b66b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begin a one-shot (read temperature only upon request) measurement. Value must be read later, not returned here! <br /></td></tr>
+<tr class="separator:a1835dd599b0fad2d62d706dbfb6b66b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a292fd4b3275d0485a4943cda677422a5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a292fd4b3275d0485a4943cda677422a5">conversionComplete</a> (void)</td></tr>
+<tr class="memdesc:a292fd4b3275d0485a4943cda677422a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return status of temperature conversion.  <a href="#a292fd4b3275d0485a4943cda677422a5">More...</a><br /></td></tr>
+<tr class="separator:a292fd4b3275d0485a4943cda677422a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff577be9ce22858032ac6f13df5a3a4d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#aff577be9ce22858032ac6f13df5a3a4d">readCJTemperature</a> (void)</td></tr>
-<tr class="memdesc:aff577be9ce22858032ac6f13df5a3a4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a one-shot measurement and return internal chip temperature.  <a href="#aff577be9ce22858032ac6f13df5a3a4d">More...</a><br /></td></tr>
+<tr class="memdesc:aff577be9ce22858032ac6f13df5a3a4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return cold-junction (internal chip) temperature.  <a href="#aff577be9ce22858032ac6f13df5a3a4d">More...</a><br /></td></tr>
 <tr class="separator:aff577be9ce22858032ac6f13df5a3a4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cab012482603a10fbf3f32163f29256"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a7cab012482603a10fbf3f32163f29256">readThermocoupleTemperature</a> (void)</td></tr>
-<tr class="memdesc:a7cab012482603a10fbf3f32163f29256"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a one-shot measurement and return thermocouple tip temperature.  <a href="#a7cab012482603a10fbf3f32163f29256">More...</a><br /></td></tr>
+<tr class="memdesc:a7cab012482603a10fbf3f32163f29256"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return hot-junction (thermocouple) temperature.  <a href="#a7cab012482603a10fbf3f32163f29256">More...</a><br /></td></tr>
 <tr class="separator:a7cab012482603a10fbf3f32163f29256"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa73c88e614479eef0fdefa5da6e7fb8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#aa73c88e614479eef0fdefa5da6e7fb8f">setTempFaultThreshholds</a> (float flow, float fhigh)</td></tr>
 <tr class="memdesc:aa73c88e614479eef0fdefa5da6e7fb8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the threshhold for thermocouple temperature range for fault detection. NOT the internal chip temperature range!  <a href="#aa73c88e614479eef0fdefa5da6e7fb8f">More...</a><br /></td></tr>
@@ -213,6 +222,53 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="a2cec2e77e20788a1a9443e7d265fc31d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cec2e77e20788a1a9443e7d265fc31d">&#9670;&nbsp;</a></span>setConversionMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Adafruit_MAX31856::setConversionMode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_adafruit___m_a_x31856_8h.html#a646d434b20d218b19ed6cde2b1235fd3">max31856_conversion_mode_t</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set temperature conversion mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mode</td><td>The conversion mode </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad11b8e75de3c014c151c1697ff880f5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad11b8e75de3c014c151c1697ff880f5d">&#9670;&nbsp;</a></span>getConversionMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_adafruit___m_a_x31856_8h.html#a646d434b20d218b19ed6cde2b1235fd3">max31856_conversion_mode_t</a> Adafruit_MAX31856::getConversionMode </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get temperature conversion mode. </p>
+<dl class="section return"><dt>Returns</dt><dd>The conversion mode </dd></dl>
+
+</div>
+</div>
 <a id="ad2c14883cd857b9a328dfd7ae5c5ac1b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad2c14883cd857b9a328dfd7ae5c5ac1b">&#9670;&nbsp;</a></span>setThermocoupleType()</h2>
 
@@ -281,6 +337,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="a292fd4b3275d0485a4943cda677422a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a292fd4b3275d0485a4943cda677422a5">&#9670;&nbsp;</a></span>conversionComplete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Adafruit_MAX31856::conversionComplete </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return status of temperature conversion. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if conversion complete, otherwise false </dd></dl>
+
+</div>
+</div>
 <a id="aff577be9ce22858032ac6f13df5a3a4d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aff577be9ce22858032ac6f13df5a3a4d">&#9670;&nbsp;</a></span>readCJTemperature()</h2>
 
@@ -297,8 +374,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
       </table>
 </div><div class="memdoc">
 
-<p>Start a one-shot measurement and return internal chip temperature. </p>
-<dl class="section return"><dt>Returns</dt><dd>Floating point temperature of chip in Celsius </dd></dl>
+<p>Return cold-junction (internal chip) temperature. </p>
+<dl class="section return"><dt>Returns</dt><dd>Floating point temperature in Celsius </dd></dl>
 
 </div>
 </div>
@@ -318,8 +395,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
       </table>
 </div><div class="memdoc">
 
-<p>Start a one-shot measurement and return thermocouple tip temperature. </p>
-<dl class="section return"><dt>Returns</dt><dd>Floating point temperature at end of thermocouple in Celsius </dd></dl>
+<p>Return hot-junction (thermocouple) temperature. </p>
+<dl class="section return"><dt>Returns</dt><dd>Floating point temperature in Celsius </dd></dl>
 
 </div>
 </div>
