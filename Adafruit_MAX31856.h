@@ -113,7 +113,7 @@ public:
                     int8_t spi_clk);
   Adafruit_MAX31856(int8_t spi_cs);
 
-  boolean begin(void);
+  bool begin(void);
 
   void setConversionMode(max31856_conversion_mode_t mode);
   max31856_conversion_mode_t getConversionMode(void);
@@ -134,8 +134,8 @@ public:
   void setNoiseFilter(max31856_noise_filter_t noiseFilter);
 
 private:
-  Adafruit_SPIDevice spi_dev = NULL;
-  boolean initialized;
+  Adafruit_SPIDevice spi_dev;
+  bool initialized = false;
 
   max31856_conversion_mode_t conversionMode;
 

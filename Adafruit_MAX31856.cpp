@@ -53,11 +53,8 @@
 */
 /**************************************************************************/
 Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi,
-                                     int8_t spi_miso, int8_t spi_clk) {
-  spi_dev = Adafruit_SPIDevice(spi_cs, spi_clk, spi_miso, spi_mosi, 1000000);
-
-  initialized = false;
-}
+                                     int8_t spi_miso, int8_t spi_clk)
+    : spi_dev(spi_cs, spi_clk, spi_miso, spi_mosi, 1000000) {}
 
 /**************************************************************************/
 /*!
@@ -65,12 +62,8 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi,
     @param  spi_cs Any pin for SPI Chip Select
 */
 /**************************************************************************/
-Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
-  spi_dev =
-      Adafruit_SPIDevice(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1);
-
-  initialized = false;
-}
+Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs)
+    : spi_dev(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1) {}
 
 /**************************************************************************/
 /*!
@@ -80,7 +73,7 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs) {
    ID)
 */
 /**************************************************************************/
-boolean Adafruit_MAX31856::begin(void) {
+bool Adafruit_MAX31856::begin(void) {
   initialized = spi_dev.begin();
 
   if (!initialized)
