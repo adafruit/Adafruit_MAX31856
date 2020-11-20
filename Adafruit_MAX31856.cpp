@@ -133,6 +133,7 @@ max31856_conversion_mode_t Adafruit_MAX31856::getConversionMode(void) {
 */
 /**************************************************************************/
 void Adafruit_MAX31856::setThermocoupleType(max31856_thermocoupletype_t type) {
+  ThermocoupleType = type;
   uint8_t t = readRegister8(MAX31856_CR1_REG);
   t &= 0xF0; // mask off bottom 4 bits
   t |= (uint8_t)type & 0x0F;
@@ -289,6 +290,49 @@ float Adafruit_MAX31856::readThermocoupleTemperature(void) {
   temp24 >>= 5; // bottom 5 bits are unused
 
   return temp24 * 0.0078125;
+}
+
+
+/**************************************************************************/
+/*!
+    @brief  Return hot-junction (thermocouple) Voltage
+    @returns Floating point voltage in µV
+*/
+/**************************************************************************/
+float Adafruit_MAX31856::readThermocoupleVoltage(void) {
+
+  // for one-shot, make it happen
+  if (conversionMode == MAX31856_ONESHOT) {
+    triggerOneShot();
+    uint32_t start = millis();
+    while (!conversionComplete()) {
+      if (millis() - start > 250)
+        return NAN;
+      delay(10);
+    }
+  }
+
+  // read the thermocouple registers (3 bytes)
+  // for VMODE8 and VMODE32 the following formula apply
+  // Code = 8 x 1.6 x 2^17 x VIN
+  // Code = 32 x 1.6 x 2^17 x VIN
+  // Where Code is 19 bit signed number from TC registers and VIN is thermocouple input voltage in V
+ 
+  int32_t temp24 = readRegister24(MAX31856_LTCBH_REG);
+  // and compute temperature
+  if (temp24 & 0x800000) {
+    temp24 |= 0xFF000000; // fix sign
+  }
+
+  temp24 >>= 5; // bottom 5 bits are unused
+  if (ThermocoupleType == MAX31856_VMODE_G8) { //VMODE8
+      return 1000000*temp24/(8*1.6*131072);   // V to µV --> *1000000
+ } 
+  else if (ThermocoupleType ==  MAX31856_VMODE_G32) { //VMODE32
+   return 1000000*temp24/(32*1.6*131072); 
+  } else { // not in voltage mode
+   return NAN;
+ }
 }
 
 /**********************************************/
