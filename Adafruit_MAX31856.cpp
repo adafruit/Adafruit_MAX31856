@@ -61,10 +61,11 @@ Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi,
 /*!
     @brief  Instantiate MAX31856 object and use hardware SPI
     @param  spi_cs Any pin for SPI Chip Select
+    @param _spi which spi buss to use.
 */
 /**************************************************************************/
-Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs)
-    : spi_dev(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1) {}
+Adafruit_MAX31856::Adafruit_MAX31856(int8_t spi_cs, SPIClass *_spi)
+    : spi_dev(spi_cs, 1000000, SPI_BITORDER_MSBFIRST, SPI_MODE1, _spi) {}
 
 /**************************************************************************/
 /*!
