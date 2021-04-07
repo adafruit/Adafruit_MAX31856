@@ -76,9 +76,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a14a4881b026f6dc555da759abcb0d9d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a14a4881b026f6dc555da759abcb0d9d1">Adafruit_MAX31856</a> (int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk)</td></tr>
 <tr class="memdesc:a14a4881b026f6dc555da759abcb0d9d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate MAX31856 object and use software SPI pins.  <a href="#a14a4881b026f6dc555da759abcb0d9d1">More...</a><br /></td></tr>
 <tr class="separator:a14a4881b026f6dc555da759abcb0d9d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58c30d7e5be4257cd17f86aaccde80a9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a58c30d7e5be4257cd17f86aaccde80a9">Adafruit_MAX31856</a> (int8_t spi_cs)</td></tr>
-<tr class="memdesc:a58c30d7e5be4257cd17f86aaccde80a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate MAX31856 object and use hardware SPI.  <a href="#a58c30d7e5be4257cd17f86aaccde80a9">More...</a><br /></td></tr>
-<tr class="separator:a58c30d7e5be4257cd17f86aaccde80a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a83e5349a8dea6815f3cd82628801d5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#a1a83e5349a8dea6815f3cd82628801d5">Adafruit_MAX31856</a> (int8_t spi_cs, SPIClass *_spi=&amp;SPI)</td></tr>
+<tr class="memdesc:a1a83e5349a8dea6815f3cd82628801d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate MAX31856 object and use hardware SPI.  <a href="#a1a83e5349a8dea6815f3cd82628801d5">More...</a><br /></td></tr>
+<tr class="separator:a1a83e5349a8dea6815f3cd82628801d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af58bc03e79eb53d106402cb09e374f1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_a_x31856.html#af58bc03e79eb53d106402cb09e374f1f">begin</a> (void)</td></tr>
 <tr class="memdesc:af58bc03e79eb53d106402cb09e374f1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize MAX31856 attach/set pins or SPI device, default to K thermocouple.  <a href="#af58bc03e79eb53d106402cb09e374f1f">More...</a><br /></td></tr>
 <tr class="separator:af58bc03e79eb53d106402cb09e374f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,8 +174,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a58c30d7e5be4257cd17f86aaccde80a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58c30d7e5be4257cd17f86aaccde80a9">&#9670;&nbsp;</a></span>Adafruit_MAX31856() <span class="overload">[2/2]</span></h2>
+<a id="a1a83e5349a8dea6815f3cd82628801d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a83e5349a8dea6815f3cd82628801d5">&#9670;&nbsp;</a></span>Adafruit_MAX31856() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -184,8 +184,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td class="memname">Adafruit_MAX31856::Adafruit_MAX31856 </td>
           <td>(</td>
           <td class="paramtype">int8_t&#160;</td>
-          <td class="paramname"><em>spi_cs</em></td><td>)</td>
+          <td class="paramname"><em>spi_cs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">SPIClass *&#160;</td>
+          <td class="paramname"><em>_spi</em> = <code>&amp;SPI</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -194,6 +204,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">spi_cs</td><td>Any pin for SPI Chip Select </td></tr>
+    <tr><td class="paramname">_spi</td><td>which spi buss to use. </td></tr>
   </table>
   </dd>
 </dl>
