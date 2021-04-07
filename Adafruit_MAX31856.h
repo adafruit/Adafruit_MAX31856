@@ -111,7 +111,7 @@ class Adafruit_MAX31856 {
 public:
   Adafruit_MAX31856(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso,
                     int8_t spi_clk);
-  Adafruit_MAX31856(int8_t spi_cs);
+  Adafruit_MAX31856(int8_t spi_cs, SPIClass *_spi = &SPI);
 
   bool begin(void);
 

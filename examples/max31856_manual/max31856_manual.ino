@@ -10,6 +10,8 @@
 //Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(10, 11, 12, 13);
 // use hardware SPI, just pass in the CS pin
 Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(10);
+// use hardware SPI, pass in the CS pin and using SPI1
+//Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(10, &SPI1);
 
 void setup() {
   Serial.begin(115200);
