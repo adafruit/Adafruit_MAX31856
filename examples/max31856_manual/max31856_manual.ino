@@ -36,7 +36,7 @@ void setup() {
     case MAX31856_TCTYPE_S: Serial.println("S Type"); break;
     case MAX31856_TCTYPE_T: Serial.println("T Type"); break;
     case MAX31856_VMODE_G8: Serial.println("Voltage x8 Gain mode"); break;
-    case MAX31856_VMODE_G32: Serial.println("Voltage x8 Gain mode"); break;
+    case MAX31856_VMODE_G32: Serial.println("Voltage x32 Gain mode"); break;
     default: Serial.println("Unknown"); break;
   }
 
