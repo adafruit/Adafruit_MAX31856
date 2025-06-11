@@ -128,6 +128,7 @@ public:
 
   float readCJTemperature(void);
   float readThermocoupleTemperature(void);
+  float readThermocoupleVoltage(void);
 
   void setTempFaultThreshholds(float flow, float fhigh);
   void setColdJunctionFaultThreshholds(int8_t low, int8_t high);
@@ -138,6 +139,7 @@ private:
   bool initialized = false;
 
   max31856_conversion_mode_t conversionMode;
+  max31856_thermocoupletype_t ThermocoupleType;
 
   void readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n);
 
